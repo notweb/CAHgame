@@ -1,0 +1,28 @@
+<h1 id="title">Cards Against Humanity</h1>
+<div id="gameboard_wrapper">
+    <div id="playerlist">
+        <ul>
+            <li class="player">You</li>
+            <li class="player">Player 1</li>
+            <li class="player">Player 2</li>
+            <li class="player">Player 3</li>
+            <li class="player">Player 4</li>
+        </ul>
+    </div>
+    <div id="gameboard">
+        <div class="gamecard">{{ currentDealerCard.content }}</div>
+        <div class="selectedCard">{{ selectedCard.content }}</div>
+    </div>
+    <div class="submitButton"><button (click)="submitCard()">Submit</button></div>
+    <div class="submitButton"><button (click)="drawPlayerCards()">Draw Cards</button></div>
+    <div class="submitButton"><button (click)="newGame()">New Game</button></div>
+    <p>{{ totalCards }}</p>
+    <div id="playercards">
+        <hr />
+        <ul>
+            <li class="card" *ngFor="let card of playerHand" 
+                [class.selected]="card === selectedCard" (click)="onSelected(card)">{{ card.content }}</li> 
+                <!-- <li *ngFor="let deal of allDealerCards">{{ deal.content }}</li> -->
+        </ul>
+    </div>
+</div>

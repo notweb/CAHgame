@@ -1,0 +1,84 @@
+* {
+    font-family: Arial, Helvetica, sans-serif;
+}
+#gameboard_wrapper {
+    margin: 0 auto;
+}
+#playercards {
+    margin: 10px auto 10px auto;
+    overflow: auto;
+    width: 100%;
+}
+.card {
+    background-color: white;
+    color: black;
+    width: 150px;
+    height: 200px;
+    margin: 10px;
+    border-radius: 6px;
+    border: 1px solid black;
+    padding: 10px;
+    float: left;
+    list-style-type: none;
+    cursor: pointer;
+    font-weight: bolder;
+}
+.card:hover, .selected, .selected:hover {
+    background-color: gray;
+    color: white;
+    border: 1px solid red;
+    font-weight: bolder;
+}
+#gameboard {
+    width: 500px;
+    margin: auto;
+}
+.selectedCard {
+    background-color: white;
+    color: black;
+    width: 150px;
+    height: 200px;
+    margin: 10px;
+    border-radius: 6px;
+    border: 1px solid black;
+    float: right;
+    overflow: none;
+    padding: 10px;
+}
+.gamecard {
+    background-color: black;
+    color: white;
+    float: left;
+    width: 150px;
+    height: 200px;
+    margin: 10px auto 10px auto;
+    overflow: none;
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: bolder;
+}
+.submitButton {
+    margin: 10px auto 10px auto;
+    text-align: center;
+}
+.submitButton button {
+    /* border: none; */
+    padding: 5px;
+    border-radius: 4px;
+    width: 100px;
+}
+#playerlist {
+    list-style-type: none;
+    width: 70%;
+    height: 30px;
+    text-align: center;
+    padding: 4px;
+    margin: 5px auto 20px auto; 
+    background-color: green;
+    border: 1px solid black;
+    border-radius: 6px;
+}
+.player {
+    display: inline;
+    padding: 10px;
+}
