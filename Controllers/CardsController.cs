@@ -30,8 +30,16 @@ namespace CAHgame.Controllers
             return dealerCards;
         }
 
+        // TODO: Remove this once signalr is up and running
+        [HttpGet("[action]")]
+        public List<Card> getCardsInPlay() {
+            List<Card> cards = new List<Card>();
+            cards.Add( new Card {Id = 1000, Type = 2, Content = "From the cards controller 1"});
+            cards.Add( new Card {Id = 1001, Type = 2, Content = "From the cards controller 2"});
+            cards.Add( new Card {Id = 1002, Type = 2, Content = "From the cards controller 3"});
 
-        
+            return cards;
+        }
         // TODO: Make an admin page where new cards can be added to the deck
         // TODO: SignalR integration
     }

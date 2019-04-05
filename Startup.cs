@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using CAHgame.Hubs;
 
 namespace CAHgame
 {
@@ -23,6 +24,17 @@ namespace CAHgame
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Add cross-origin policy to accept requests from localhost on port 5001
+            services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>{
+            builder
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .WithOrigins("https://localhost:5001");
+            }));
+
+            // Add SignalR service
+            services.AddSignalR();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddSingleton<IConfiguration>(Configuration);
 
@@ -36,6 +48,7 @@ namespace CAHgame
             });
 
             services.AddScoped<ICardsService, CardsService>();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,6 +68,12 @@ namespace CAHgame
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+
+            app.UseCors("CorsPolicy");
+            app.UseSignalR(routes =>
+            {
+            routes.MapHub<GameHub>("/cardlist");
+            });
 
             app.UseMvc(routes =>
             {

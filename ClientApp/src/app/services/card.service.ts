@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { card } from './card';
-import { gamecard } from './gamecard';
+import { card } from '../card';
+import { gamecard } from '../gamecard';
 import { HttpClient } from '@angular/common/http';
 // import { CARDS, GAMECARDS } from './seed-data';
 
@@ -27,5 +27,14 @@ export class CardService {
 
   getPlayerCards() {
     return this.http.get('/api/cards/getPlayerCards')
+  }
+
+  getCardsInPlay() {
+    return this.http.get('/api/cards/getCardsInPlay')
+  }
+
+  playCard(): void {
+    // this.http.post('api/cards/playCard')
+    // this.getCardsInPlay()
   }
 }

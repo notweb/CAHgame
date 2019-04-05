@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { card } from '../card';
 // import { gamecard } from '../gamecard';
-import { CardService } from '../card.service';
+import { CardService } from '../services/card.service';
+import { SignalrService } from '../services/signalr.service';
+import { HttpClient } from '@angular/common/http';
 
 
 // TODO: Add option for a player to pause their game, allowing the game to go on without them if they need to step away
@@ -19,7 +21,8 @@ export class CardlistComponent implements OnInit {
   playerHand: card[];
   selectedCard: card;
   prevSelected: card;
-  history: card[];
+  cardsInPlay: card[];
+  // nullCard: card = { Id: -1, Type: 2, Content: null };
   
   onSelected(card: card): void {
     
@@ -84,6 +87,10 @@ export class CardlistComponent implements OnInit {
     return deck;
   }
 
+  getCardsInPlay(): void {
+    this.cardService.getCardsInPlay().subscribe((cards: card[]) => {this.cardsInPlay = cards});
+  }
+
   submitCard(): void {
     // TODO: method to deal with submitted card
 
@@ -99,9 +106,15 @@ export class CardlistComponent implements OnInit {
 
   drawPlayerCards(): void {
     var totalCards: number = this.playerHand.length;
+    var numAllCards: number = (this.allPlayerCards.length) - 1;
     while ( totalCards < 10 ) {
-      this.playerHand.push(this.allPlayerCards[(Math.random() * this.allPlayerCards.length) - 1])
+      var randomNumber: number = Math.floor(Math.random() * numAllCards);
+      this.playerHand.push(this.allPlayerCards[randomNumber])
+      totalCards++;
     }
+    // TODO: remove the cards added to playerHand from this.allPlayerCards
+    
+    // this.playerHand.forEach((c => console.log(c.Content)));
   }
 
   newGame(): void {
@@ -117,12 +130,24 @@ export class CardlistComponent implements OnInit {
 
     // Load 10 cards for players
     this.playerHand = shuffled.slice(0, 10);
+
+    // Initialize spot for played card
+    //this.selectedCard = this.nullCard;
   }
 
-  constructor(private cardService: CardService) {
+  constructor(private cardService: CardService, private signalrService: SignalrService, private http: HttpClient) {
    }
 
   ngOnInit() {
+    this.signalrService.startConnection();
+    this.signalrService.addCardListListener();
     this.newGame();
+  }
+
+  private startHttpRequest = () => {
+    this.http.get('https://localhost:5001/api/message/sendcard')
+      .subscribe(res => {
+      console.log(res);
+    })
   }
 }
