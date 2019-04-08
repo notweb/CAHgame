@@ -72,7 +72,7 @@ namespace CAHgame
             app.UseCors("CorsPolicy");
             app.UseSignalR(routes =>
             {
-            routes.MapHub<GameHub>("/cardlist");
+            routes.MapHub<GameHub>("/hub");
             });
 
             app.UseMvc(routes =>

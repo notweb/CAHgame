@@ -8,6 +8,7 @@ namespace CAHgame.Hubs
     {
         public async Task SendPlayedCard(Card card)
         {
+            await Clients.All.SendAsync("cardReceived", card);
         }
     }
 }

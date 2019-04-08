@@ -33,7 +33,7 @@
     width: 500px;
     margin: auto;
 }
-.selectedCard {
+#selectedCard {
     background-color: white;
     color: black;
     width: 150px;

@@ -4,7 +4,8 @@ import { card } from '../card';
 import { CardService } from '../services/card.service';
 import { SignalrService } from '../services/signalr.service';
 import { HttpClient } from '@angular/common/http';
-
+import { HubConnection } from '@aspnet/signalr'
+import * as signalR from "@aspnet/signalr";
 
 // TODO: Add option for a player to pause their game, allowing the game to go on without them if they need to step away
 
@@ -14,6 +15,8 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./cardlist.component.css']
 })
 export class CardlistComponent implements OnInit {
+  private _hubConnection: HubConnection | undefined;
+  public async: any;
   allPlayerCards: card[];
   playerCards: card[];
   allDealerCards: card[];
@@ -21,8 +24,8 @@ export class CardlistComponent implements OnInit {
   playerHand: card[];
   selectedCard: card;
   prevSelected: card;
-  cardsInPlay: card[];
-  // nullCard: card = { Id: -1, Type: 2, Content: null };
+  cardsInPlay: card[] = [];
+  nullCard: card = { Id: -1, Type: 2, Content: null };
   
   onSelected(card: card): void {
     
@@ -93,13 +96,14 @@ export class CardlistComponent implements OnInit {
 
   submitCard(): void {
     // TODO: method to deal with submitted card
-
+    this.sendMessage(this.selectedCard);
     // Remove selected card from the player's deck
     if (this.selectedCard.Id == -1) {}
     else {
       this.playerHand.splice(this.playerHand.indexOf(this.selectedCard), 1)
       this.selectedCard = {Content: null, Type: null, Id: -1};
     }
+    
     
     // TODO: Do something with the 'You' label in the p:layer list indicating user has made his/her move
   }
@@ -135,19 +139,30 @@ export class CardlistComponent implements OnInit {
     //this.selectedCard = this.nullCard;
   }
 
-  constructor(private cardService: CardService, private signalrService: SignalrService, private http: HttpClient) {
-   }
+  constructor(private cardService: CardService, private signalrService: SignalrService, private http: HttpClient) {}
 
-  ngOnInit() {
-    this.signalrService.startConnection();
-    this.signalrService.addCardListListener();
-    this.newGame();
+  public sendMessage(card: card): void {
+    // const data = this.selectedCard;
+
+    if (this._hubConnection) {
+        this._hubConnection.invoke('SendPlayedCard', card);
+    }
   }
-
-  private startHttpRequest = () => {
-    this.http.get('https://localhost:5001/api/message/sendcard')
-      .subscribe(res => {
-      console.log(res);
-    })
+ 
+  ngOnInit() {
+    // this.signalrService.startConnection();
+    // this.signalrService.addCardListListener();
+    this._hubConnection = new signalR.HubConnectionBuilder()
+            .withUrl('https://localhost:5001/hub')
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+ 
+    this._hubConnection.start().catch(err => console.error(err.toString()));
+ 
+    this._hubConnection.on('cardReceived', (card: card) => {
+            // const received = data;
+            this.cardsInPlay.push(card);
+    });
+    this.newGame();
   }
 }
