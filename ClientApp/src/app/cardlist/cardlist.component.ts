@@ -83,6 +83,9 @@ export class CardlistComponent implements OnInit {
   newDealerCard(): void {
     var index: number = Math.floor(Math.random() * this.allDealerCards.length);
     this.currentDealerCard = this.allDealerCards[index];
+    if (this._hubConnection) {
+      this._hubConnection.invoke('SendDealerCard', this.currentDealerCard);
+    }
   }
 
   shuffleDeck(deck: card[]): card[] {
@@ -121,6 +124,17 @@ export class CardlistComponent implements OnInit {
     // this.playerHand.forEach((c => console.log(c.Content)));
   }
 
+  initializePlayerHand(): void {
+    // Shuffle player cards
+    var shuffled = this.shuffleDeck(this.allPlayerCards);
+
+    // Load 10 cards for players
+    this.playerHand = shuffled.slice(0, 10);
+    if (this._hubConnection) {
+      this._hubConnection.invoke("SendPlayerHand", this.playerHand);
+    }
+  }
+
   newGame(): void {
     // Initialize player and dealer decks
     this.getAllPlayerCards();
@@ -129,11 +143,7 @@ export class CardlistComponent implements OnInit {
     // Get a random dealer card from the deck
     this.newDealerCard();
 
-    // Shuffle player cards
-    var shuffled = this.shuffleDeck(this.allPlayerCards);
-
-    // Load 10 cards for players
-    this.playerHand = shuffled.slice(0, 10);
+    this.initializePlayerHand();
 
     // Initialize spot for played card
     //this.selectedCard = this.nullCard;
@@ -163,6 +173,16 @@ export class CardlistComponent implements OnInit {
             // const received = data;
             this.cardsInPlay.push(card);
     });
+
+    this._hubConnection.on("dealerCardReceived", (card: card) => {
+      this.currentDealerCard = card;
+    })
+
+    this._hubConnection.on("playerHandReceived", (c: card[]) => {
+      // Load 10 cards for players
+      this.playerHand = c;
+    })
+
     this.newGame();
   }
 }

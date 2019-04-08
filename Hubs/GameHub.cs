@@ -10,5 +10,15 @@ namespace CAHgame.Hubs
         {
             await Clients.All.SendAsync("cardReceived", card);
         }
+
+        public async Task SendDealerCard(Card card)
+        {
+            await Clients.All.SendAsync("dealerCardReceived", card);
+        }
+
+        public async Task SendPlayerHand(Card[] cards)
+        {
+            await Clients.All.SendAsync("playerHandReceived", cards);
+        }
     }
 }
