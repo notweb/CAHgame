@@ -1,93 +1,71 @@
 * {
+    box-sizing: border-box;
     font-family: Arial, Helvetica, sans-serif;
-}
-#gameboard_wrapper {
-    margin: 0 auto;
-}
-#playercards {
-    margin: 10px auto 10px auto;
-    overflow: auto;
-    width: 100%;
-}
-.card {
-    background-color: white;
-    color: black;
-    width: 150px;
-    height: 200px;
-    margin: 10px;
-    border-radius: 6px;
-    border: 1px solid black;
-    padding: 10px;
+  } 
+
+.col-1 {width: 8.33%;}
+.col-2 {width: 16.66%;}
+.col-3 {width: 25%;}
+.col-4 {width: 33.33%;}
+.col-5 {width: 41.66%;}
+.col-6 {width: 50%;}
+.col-7 {width: 58.33%;}
+.col-8 {width: 66.66%;}
+.col-9 {width: 75%;}
+.col-10 {width: 83.33%;}
+.col-11 {width: 91.66%;}
+.col-12 {width: 100%;}
+
+[class*="col-"] {
     float: left;
-    list-style-type: none;
-    cursor: pointer;
-    font-weight: bolder;
+    padding: 15px;
+    /* border: 1px solid red; */
 }
-.card:hover, .selected, .selected:hover {
-    background-color: gray;
-    color: white;
-    border: 1px solid red;
-    font-weight: bolder;
+
+.row::after {
+    content: "";
+    clear: both;
+    display: table;
 }
-#gameboard {
-    width: 500px;
-    margin: auto;
-}
-#selectedCard {
-    background-color: white;
-    color: black;
-    width: 150px;
-    height: 200px;
-    margin: 10px;
+
+
+
+.card {
+    min-height: 150px;
+    min-width: 80px;
     border-radius: 6px;
     border: 1px solid black;
-    float: right;
-    overflow: none;
-    padding: 10px;
+    font-size: 0.9em;
+    font-weight: bolder;
+    padding: 1%;
+    margin: 4px;
 }
-.gamecard {
+
+/* li.card {
+    
+}    */
+
+.cardinplay {
+    min-height: 25px;
+    padding: 4px;
+}
+
+#gamecards {
+    height: 300px;
+}
+
+#dealer-card {
     background-color: black;
     color: white;
-    float: left;
-    width: 150px;
-    height: 200px;
-    margin: 10px auto 10px auto;
-    overflow: none;
-    padding: 10px;
-    border-radius: 6px;
-    font-weight: bolder;
+    font-size: 1.2em;
+    max-width: 80%;
 }
-.submitButton {
-    margin: 10px auto 10px auto;
-    text-align: center;
-}
-.submitButton button {
-    /* border: none; */
-    padding: 5px;
-    border-radius: 4px;
-    width: 100px;
-}
-#playerlist {
-    list-style-type: none;
-    width: 70%;
-    height: 30px;
-    text-align: center;
-    padding: 4px;
-    margin: 5px auto 20px auto; 
-    background-color: green;
-    border: 1px solid black;
-    border-radius: 6px;
-}
-.player {
-    display: inline;
-    padding: 10px;
-}
-#divCardsinPlay {
-    width: 200px;
-    float: right;
-    list-style-type: none;
-}
-#cardsinplay {
-    list-style-type: none;
-    float: right;
+
+@media screen and (max-width: 700px) {
+    .row {   
+      flex-direction: column;
+    }
+    #dealer-card, card {
+        font-size: 0.8em;
+    }
 }

@@ -1,6 +1,6 @@
 <h1 id="title">Cards Against Humanity</h1>
-<div id="gameboard_wrapper">
-    <div id="playerlist">
+<div id="gameboard_wrapper" class="wrapper col-12">
+    <!-- <div id="playerlist">
         <ul>
             <li class="player">You</li>
             <li class="player">Player 1</li>
@@ -8,28 +8,41 @@
             <li class="player">Player 3</li>
             <li class="player">Player 4</li>
         </ul>
-    </div>
+    </div> -->
     <div id="gameboard">
-        <div *ngIf="currentDealerCard" class="gamecard">{{ currentDealerCard.content }}</div>
-        <div *ngIf="selectedCard" id="selectedCard">{{ selectedCard.content }}</div>
-        <!-- Test area for signalr-->
-    </div>
-    <div id="submitCard" class="submitButton"><button (click)="submitCard()">Submit</button></div>
-    <div id="drawCardButton" class="submitButton"><button (click)="drawPlayerCards()">Draw Cards</button></div>
-    <div  class="submitButton"><button id="newGameButton" (click)="newGame()">New Game</button></div>
-    <div id="getCardsButton" class="submitButton"><button (click)="getCardsInPlay()">Get Cards</button></div>
-    <p>{{ totalCards }}</p>
-    <div id="playercards">
+        <div id="buttonsdiv" class="row">
+            <div class="col-3"></div>
+            <div class="submitButton col-2"><button id="submitCard" (click)="submitCard()">Submit</button></div>
+            <div class="submitButton col-2"><button id="drawCardButton" (click)="drawPlayerCards()">Draw Cards</button></div>
+            <div class="submitButton col-2"><button id="newGameButton" (click)="newGame()">New Game</button></div>
+            <div class="col-3"></div>
+            <!-- <div id="getCardsButton" class="submitButton"><button (click)="getCardsInPlay()">Get Cards</button></div> -->
+        </div>
         <hr />
+        <div id="gamecards" class="row">
+            <div class="col-3"></div>
+            <div *ngIf="currentDealerCard" id="dealer-card" class="card col-2">{{ currentDealerCard.content }}</div>
+            <div *ngIf="selectedCard" id="selectedCard" class="card col-2">{{ selectedCard.content }}</div>
+            <div *ngIf="cardsInPlay" id="cardsInPlay" class="col-3">
+                <ul>
+                    <li *ngFor="let cards of cardsInPlay" class="card cardinplay">{{ cards.content }}</li>
+                </ul>
+            </div>
+            <div class="col-2"></div>
+        </div>
+    </div>
+   <hr />
+    <!-- <p>{{ totalCards }}</p> -->
+    <div id="playercards" class="row">
         <ul>
-            <li class="card" *ngFor="let card of playerHand" 
+            <li class="card col-2" *ngFor="let card of playerHand" 
                 [class.selected]="card === selectedCard" (click)="onSelected(card)">{{ card.content }}</li> 
                 <!-- <li *ngFor="let deal of allDealerCards">{{ deal.content }}</li> -->
         </ul>
     </div>
-    <div id="divCardsinPlay" *ngIf="cardsInPlay.length > 0">
+    <!-- <div id="divCardsinPlay" *ngIf="cardsInPlay.length > 0">
         <ul id="cardsinplay">
             <li *ngFor="let c of cardsInPlay">{{ c.content }}</li>
         </ul>
-    </div>
+    </div> -->
 </div>
