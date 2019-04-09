@@ -23,12 +23,12 @@
             <div class="col-3"></div>
             <div *ngIf="currentDealerCard" id="dealer-card" class="card col-2">{{ currentDealerCard.content }}</div>
             <div *ngIf="selectedCard" id="selectedCard" class="card col-2">{{ selectedCard.content }}</div>
-            <div *ngIf="cardsInPlay" id="cardsInPlay" class="col-3">
+            <div *ngIf="cardsInPlay" id="cardsInPlay" class="col-4">
                 <ul>
                     <li *ngFor="let cards of cardsInPlay" class="card cardinplay">{{ cards.content }}</li>
                 </ul>
             </div>
-            <div class="col-2"></div>
+            <div class="col-1"></div>
         </div>
     </div>
    <hr />

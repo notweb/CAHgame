@@ -1,7 +1,8 @@
 * {
     box-sizing: border-box;
     font-family: Arial, Helvetica, sans-serif;
-  } 
+  }
+
 
 .col-1 {width: 8.33%;}
 .col-2 {width: 16.66%;}
@@ -28,7 +29,10 @@
     display: table;
 }
 
-
+button {
+    width: 110px;
+    margin-left: 14px;
+}
 
 .card {
     min-height: 150px;
@@ -48,6 +52,7 @@
 .cardinplay {
     min-height: 25px;
     padding: 4px;
+    border-radius: 0;
 }
 
 #gamecards {

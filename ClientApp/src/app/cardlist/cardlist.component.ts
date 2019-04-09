@@ -79,6 +79,11 @@ export class CardlistComponent implements OnInit {
       this.playerHand.splice(this.playerHand.indexOf(this.selectedCard), 1)
       this.selectedCard = {Content: null, Type: null, Id: -1};
     }
+
+    // TODO: Highlight the card player submitted
+
+    // Disable submit button so you can only submit once per round
+    document.getElementById("submitCard").setAttribute("disabled", "true");
     
     
     // TODO: Do something with the 'You' label in the p:layer list indicating user has made his/her move
