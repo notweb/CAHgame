@@ -37,42 +37,9 @@ export class CardlistComponent implements OnInit {
     // } else {
     //   this.currentGameCard.sentence = this.currentGameCard.sentence.replace(this.prevSelected.content, this.selectedCard.content);
     // }
-     
   }
 
-  // getAllPlayerCards(): void {
-  //   this.allPlayerCards = this.cardService.getCards();
-  // }
-
-  // getPlayerHand(): void {
-  //   this.getAllPlayerCards();
-  // }
-
-  // getAllDealerCards(): void {
-  //   this.allDealerCards = this.cardService.getDealerCards();
-  // }
-
-  // newGame(): void {
-  //   // Get all player and dealer cards
-  //   this.cardService.getPlayerCards().subscribe((result: card[]) => {this.allPlayerCards = result;});
-  //   this.cardService.getDealerCards().subscribe((data: card[]) => {this.allDealerCards = data;});
-
-  //   // Reset player selected card
-  //   this.selectedCard = null;
-  //   this.prevSelected = null;
-
-  //   // Shuffle all player cards
-  //   // this.shuffled = this.allPlayerCards.sort(() => 0.5 - Math.random());
-
-  //   // Load 10 cards for players
-  //   this.playerHand = this.shuffled.slice(0, 10);
-
-  //   // Get a random dealer card from the deck
-  //   var index: number = Math.floor(Math.random() * this.allDealerCards.length);
-  //   this.currentDealerCard = this.allDealerCards[index];
-  // }
-
-  getAllDealerCards(): void {
+   getAllDealerCards(): void {
     this.cardService.getDealerCards().subscribe((data: card[]) => {this.allDealerCards = data;});
   }
 
@@ -81,7 +48,10 @@ export class CardlistComponent implements OnInit {
   }
 
   newDealerCard(): void {
+    // Get a random card index from the dealer deck
     var index: number = Math.floor(Math.random() * this.allDealerCards.length);
+
+    // Use the random index above to select a random card from the dealer deck
     this.currentDealerCard = this.allDealerCards[index];
     if (this._hubConnection) {
       this._hubConnection.invoke('SendDealerCard', this.currentDealerCard);
@@ -89,17 +59,20 @@ export class CardlistComponent implements OnInit {
   }
 
   shuffleDeck(deck: card[]): card[] {
+    // Shuffle the deck of cards submitted to this method
     deck.sort(() => 0.5 - Math.random());
     return deck;
   }
 
   getCardsInPlay(): void {
+    // Display card played by each player on the screen
     this.cardService.getCardsInPlay().subscribe((cards: card[]) => {this.cardsInPlay = cards});
   }
 
   submitCard(): void {
     // TODO: method to deal with submitted card
     this.sendMessage(this.selectedCard);
+
     // Remove selected card from the player's deck
     if (this.selectedCard.Id == -1) {}
     else {
@@ -112,8 +85,13 @@ export class CardlistComponent implements OnInit {
   }
 
   drawPlayerCards(): void {
+    // Get total number of cards in player's hand
     var totalCards: number = this.playerHand.length;
+
+    // Get total number of cards in player deck
     var numAllCards: number = (this.allPlayerCards.length) - 1;
+
+    // Draw new cards until player's hand has 10 total cards
     while ( totalCards < 10 ) {
       var randomNumber: number = Math.floor(Math.random() * numAllCards);
       this.playerHand.push(this.allPlayerCards[randomNumber])
@@ -121,15 +99,16 @@ export class CardlistComponent implements OnInit {
     }
     // TODO: remove the cards added to playerHand from this.allPlayerCards
     
-    // this.playerHand.forEach((c => console.log(c.Content)));
   }
 
   initializePlayerHand(): void {
     // Shuffle player cards
     var shuffled = this.shuffleDeck(this.allPlayerCards);
 
-    // Load 10 cards for players
+    // Get the first 10 cards from the shuffled deck
     this.playerHand = shuffled.slice(0, 10);
+
+    // Send 10 new cards to each player via SignalR
     if (this._hubConnection) {
       this._hubConnection.invoke("SendPlayerHand", this.allPlayerCards);
     }
@@ -143,13 +122,14 @@ export class CardlistComponent implements OnInit {
     // Get a random dealer card from the deck
     this.newDealerCard();
 
+    // Initialize player hand
     this.initializePlayerHand();
 
     // Initialize spot for played card
-    //this.selectedCard = this.nullCard;
+    this.selectedCard = this.nullCard;
+
     // Disable new game button
-    // TODO: move this into a signalr function later
-    document.getElementById("newGameButton").setAttribute("disabled", "true");
+    this.disableNewGameButton(true);
   }
 
   constructor(private cardService: CardService, private signalrService: SignalrService, private http: HttpClient) {}
@@ -161,26 +141,33 @@ export class CardlistComponent implements OnInit {
         this._hubConnection.invoke('SendPlayedCard', card);
     }
   }
+
+  public disableNewGameButton(status: boolean): void {
+    this._hubConnection.invoke("DisableNewGameButton", status);
+  }
  
   ngOnInit() {
-    // this.signalrService.startConnection();
-    // this.signalrService.addCardListListener();
+    // Create new SignalR hub connection
     this._hubConnection = new signalR.HubConnectionBuilder()
             .withUrl('https://localhost:5001/hub')
             .configureLogging(signalR.LogLevel.Information)
             .build();
  
+    // Start SignalR hub connection
     this._hubConnection.start().catch(err => console.error(err.toString()));
  
+    // SignalR listener for displaying cards played by each player
     this._hubConnection.on('cardReceived', (card: card) => {
             // const received = data;
             this.cardsInPlay.push(card);
     });
 
+    // SignalR listener for initializing new dealer card
     this._hubConnection.on("dealerCardReceived", (card: card) => {
       this.currentDealerCard = card;
     });
 
+    // SignalR listener for initializing hand for each player
     this._hubConnection.on("playerHandReceived", (cards: card[]) => {
       // Shuffle all player cards
       var shuffled = this.shuffleDeck(cards);
@@ -190,6 +177,13 @@ export class CardlistComponent implements OnInit {
       // this.playerHand = c;
     });
 
+    // SignalR listener for disabling new game button
+    this._hubConnection.on("newGameButtonStatus", (status: boolean) => {
+      document.getElementById("newGameButton").setAttribute("disabled", status.toString());
+    });
+
+    // Start a new game
+    // TODO: Find out why this doesn't initialize dealer and player cards
     this.newGame();
   }
 }

@@ -20,5 +20,10 @@ namespace CAHgame.Hubs
         {
             await Clients.All.SendAsync("playerHandReceived", cards);
         }
+
+        public async Task DisableNewGameButton(bool isDisabled)
+        {
+            await Clients.All.SendAsync("newGameButtonStatus", isDisabled);
+        }
     }
 }
