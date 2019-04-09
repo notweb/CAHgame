@@ -149,7 +149,7 @@ export class CardlistComponent implements OnInit {
     //this.selectedCard = this.nullCard;
     // Disable new game button
     // TODO: move this into a signalr function later
-    document.getElementById("newGameButton").disabled = true;
+    document.getElementById("newGameButton").setAttribute("disabled", "true");
   }
 
   constructor(private cardService: CardService, private signalrService: SignalrService, private http: HttpClient) {}

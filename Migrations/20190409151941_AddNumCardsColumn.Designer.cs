@@ -2,14 +2,16 @@
 using CAHgame.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CAHgame.Migrations
 {
     [DbContext(typeof(CardDbContext))]
-    partial class CardDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190409151941_AddNumCardsColumn")]
+    partial class AddNumCardsColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -12,5 +12,7 @@ namespace CAHgame.Models
         public int Type { get; set; }
         
         public string Content { get; set; }
+
+        public int NumCards { get; set; }
     }
 }
