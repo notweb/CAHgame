@@ -82,3 +82,12 @@
     display: inline;
     padding: 10px;
 }
+#divCardsinPlay {
+    width: 200px;
+    float: right;
+    list-style-type: none;
+}
+#cardsinplay {
+    list-style-type: none;
+    float: right;
+}

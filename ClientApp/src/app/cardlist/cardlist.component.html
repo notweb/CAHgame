@@ -12,11 +12,12 @@
     <div id="gameboard">
         <div *ngIf="currentDealerCard" class="gamecard">{{ currentDealerCard.content }}</div>
         <div *ngIf="selectedCard" id="selectedCard">{{ selectedCard.content }}</div>
+        <!-- Test area for signalr-->
     </div>
-    <div id="submitCard"><button (click)="submitCard()">Submit</button></div>
-    <div class="submitButton"><button (click)="drawPlayerCards()">Draw Cards</button></div>
-    <div class="submitButton"><button (click)="newGame()">New Game</button></div>
-    <div class="submitButton"><button (click)="getCardsInPlay()">Get Cards</button></div>
+    <div id="submitCard" class="submitButton"><button (click)="submitCard()">Submit</button></div>
+    <div id="drawCardButton" class="submitButton"><button (click)="drawPlayerCards()">Draw Cards</button></div>
+    <div  class="submitButton"><button id="newGameButton" (click)="newGame()">New Game</button></div>
+    <div id="getCardsButton" class="submitButton"><button (click)="getCardsInPlay()">Get Cards</button></div>
     <p>{{ totalCards }}</p>
     <div id="playercards">
         <hr />
@@ -26,7 +27,6 @@
                 <!-- <li *ngFor="let deal of allDealerCards">{{ deal.content }}</li> -->
         </ul>
     </div>
-    <!-- Test area for signalr-->
     <div id="divCardsinPlay" *ngIf="cardsInPlay.length > 0">
         <ul id="cardsinplay">
             <li *ngFor="let c of cardsInPlay">{{ c.content }}</li>

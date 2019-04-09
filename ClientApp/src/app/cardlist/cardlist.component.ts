@@ -131,7 +131,7 @@ export class CardlistComponent implements OnInit {
     // Load 10 cards for players
     this.playerHand = shuffled.slice(0, 10);
     if (this._hubConnection) {
-      this._hubConnection.invoke("SendPlayerHand", this.playerHand);
+      this._hubConnection.invoke("SendPlayerHand", this.allPlayerCards);
     }
   }
 
@@ -147,6 +147,9 @@ export class CardlistComponent implements OnInit {
 
     // Initialize spot for played card
     //this.selectedCard = this.nullCard;
+    // Disable new game button
+    // TODO: move this into a signalr function later
+    document.getElementById("newGameButton").disabled = true;
   }
 
   constructor(private cardService: CardService, private signalrService: SignalrService, private http: HttpClient) {}
@@ -176,12 +179,16 @@ export class CardlistComponent implements OnInit {
 
     this._hubConnection.on("dealerCardReceived", (card: card) => {
       this.currentDealerCard = card;
-    })
+    });
 
-    this._hubConnection.on("playerHandReceived", (c: card[]) => {
+    this._hubConnection.on("playerHandReceived", (cards: card[]) => {
+      // Shuffle all player cards
+      var shuffled = this.shuffleDeck(cards);
+      // Load 10 cards for each player
+      this.playerHand = shuffled.slice(0, 10);
       // Load 10 cards for players
-      this.playerHand = c;
-    })
+      // this.playerHand = c;
+    });
 
     this.newGame();
   }
