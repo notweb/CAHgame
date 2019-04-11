@@ -6,6 +6,7 @@ import { SignalrService } from '../services/signalr.service';
 import { HttpClient } from '@angular/common/http';
 import { HubConnection } from '@aspnet/signalr'
 import * as signalR from "@aspnet/signalr";
+import { AuthService } from '../auth/auth.service';
 
 // TODO: Add option for a player to pause their game, allowing the game to go on without them if they need to step away
 
@@ -14,6 +15,7 @@ import * as signalR from "@aspnet/signalr";
   templateUrl: './cardlist.component.html',
   styleUrls: ['./cardlist.component.css']
 })
+
 export class CardlistComponent implements OnInit {
   private _hubConnection: HubConnection | undefined;
   public async: any;
@@ -137,7 +139,10 @@ export class CardlistComponent implements OnInit {
     this.disableNewGameButton(true);
   }
 
-  constructor(private cardService: CardService, private signalrService: SignalrService, private http: HttpClient) {}
+  constructor(private cardService: CardService, 
+              private signalrService: SignalrService, 
+              private http: HttpClient,
+              private authService: AuthService) {}
 
   public sendMessage(card: card): void {
     // const data = this.selectedCard;
@@ -150,7 +155,7 @@ export class CardlistComponent implements OnInit {
   public disableNewGameButton(status: boolean): void {
     this._hubConnection.invoke("DisableNewGameButton", status);
   }
- 
+
   ngOnInit() {
     // Create new SignalR hub connection
     this._hubConnection = new signalR.HubConnectionBuilder()
@@ -186,9 +191,11 @@ export class CardlistComponent implements OnInit {
     this._hubConnection.on("newGameButtonStatus", (status: boolean) => {
       document.getElementById("newGameButton").setAttribute("disabled", status.toString());
     });
-
+    
     // Start a new game
     // TODO: Find out why this doesn't initialize dealer and player cards
     this.newGame();
+
+    
   }
 }

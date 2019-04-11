@@ -1,5 +1,9 @@
 <h1 id="title">Cards Against Humanity</h1>
-<div id="gameboard_wrapper" class="wrapper col-12">
+<div class="login-message" *ngIf="!authService.isLoggedIn">
+    <h4>You must be logged in to play Cards Against Humanity.</h4>
+</div>
+
+<div id="gameboard_wrapper" class="wrapper col-12" *ngIf="authService.isLoggedIn">
     <!-- <div id="playerlist">
         <ul>
             <li class="player">You</li>

@@ -10,6 +10,8 @@ import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { CardlistComponent } from './cardlist/cardlist.component';
+import { AuthService } from './auth/auth.service';
+import { CallbackComponent } from './callback/callback.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,8 @@ import { CardlistComponent } from './cardlist/cardlist.component';
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    CardlistComponent
+    CardlistComponent,
+    CallbackComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -28,10 +31,11 @@ import { CardlistComponent } from './cardlist/cardlist.component';
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
-      { path: 'cardlist', component: CardlistComponent}
+      { path: 'cardlist', component: CardlistComponent},
+      { path: 'callback', component: CallbackComponent}
     ])
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

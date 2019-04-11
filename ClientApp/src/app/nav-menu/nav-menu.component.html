@@ -2,6 +2,7 @@
   <nav class='navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3'>
     <div class="container">
       <a class="navbar-brand" [routerLink]='["/"]'>CAHgame</a>
+      <div *ngIf="authService.isLoggedIn">| Welcome {{ authService._userProfile.nickname }}</div>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-label="Toggle navigation"
         [attr.aria-expanded]="isExpanded" (click)="toggle()">
         <span class="navbar-toggler-icon"></span>
@@ -18,10 +19,13 @@
             <a class="nav-link text-dark" [routerLink]='["/fetch-data"]'>Fetch data</a>
           </li>
           <li class="nav-item" [routerLinkActive]='["link-active"]'>
-            <a class="nav-link text-dark" [routerLink]='["/cardlist"]'>Cards Against Humanity</a>
+            <a class="nav-link text-dark" [routerLink]='["/cardlist"]' *ngIf="authService.isLoggedIn">Cards Against Humanity</a>
           </li>
         </ul>
+        
       </div>
+      <button class="btn primary btn-dark" *ngIf="!authService.isLoggedIn" (click)="authService.login()">Login</button>
+        <button class="btn primary btn-dark" *ngIf="authService.isLoggedIn" (click)="authService.logout()">Logout</button>
     </div>
   </nav>
 </header>
