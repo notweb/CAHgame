@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as auth0 from 'auth0-js';
 import { Router } from '@angular/router';
-import { userInfo } from 'os';
 
 @Injectable({
   providedIn: 'root'
@@ -41,7 +40,7 @@ export class AuthService {
   }
 
   public login(): void {
-    this.auth0.authorize()
+    this.auth0.authorize();
   }
 
   handleLoginCallback() {
@@ -87,8 +86,8 @@ export class AuthService {
     // Ensure that returnTo URL is specified in Auth0
     // Application settings for Allowed Logout URLs
     this.auth0.logout({
-      returnTo: 'https://localhost:5001',
-      clientID: auth0.clientID
+      returnTo: 'https://localhost:5001'
+      // clientID: this.auth0.clientID //disabled this to get the returnTo field to work
     });
   }
 
